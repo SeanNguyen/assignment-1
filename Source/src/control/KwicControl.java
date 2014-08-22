@@ -1,5 +1,7 @@
 package control;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,15 +14,17 @@ public class KwicControl {
 	private KwicModel model;
 	private KwicView view;
 	
-	public KwicControl() {
-		model = new KwicModel();
-		view =  new KwicView();
+	public KwicControl(KwicView view, KwicModel model) {
+		this.view = view;
+		this.model = model;
+		
+		view.addResultButtonListener(new GetResultListener());
 	}
 	
 	//Input
 	private void input (String inputText, String ignoredText) {
-		inputText.toLowerCase();
-		ignoredText.toLowerCase();
+		inputText = inputText.toLowerCase();
+		ignoredText = ignoredText.toLowerCase();
 		inputTextToModel(inputText);
 		inputIgnoredWordsToModel(ignoredText);
 	}
@@ -42,31 +46,27 @@ public class KwicControl {
 	}
 	
 	//Alphabetizer
-	private void Alphabetize() {
-		int indexSize = model.GetIndexes().size();
-		
-		//this is normal sort, can change later
-		for (int i = 0; i < indexSize; i++) {
-			for (int j = 0; j < indexSize; j++) {
-				if (j == indexSize - 1)
-					continue;
-				Pair<Integer, Integer> currentIndex = model.GetIndexes().get(j);
-				Pair<Integer, Integer> nextIndex = model.GetIndexes().get(j + 1);
-				int lineIndex = currentIndex.getFirst();
-				int wordIndex = currentIndex.getSecond();
-				int nextLineIndex = nextIndex.getFirst();
-				int nextWordIndex = nextIndex.getSecond();
-				String currentword = model.getWordByIndex(lineIndex, wordIndex);
-				String nextWord = model.getWordByIndex(nextLineIndex, nextWordIndex);
-				if (currentword.compareToIgnoreCase(nextWord) > 0) {
-					model.SwapIndex(j, j + 1);
-				}
-			}
+	private void alphabetize() {
+		for (Pair<Integer, Integer> index : model.GetIndexes()) {
+			model.InsertToAlphabeticalIndexList(index);
 		}
 	}
 	
 	//Output
-	
+	private void output () {
+		String result = "";
+		List < List < String > > lines = model.GetLines();
+		List < Pair<Integer, Integer>> alphabetialIndex = model.GetAlphabetialIndexes();
+		
+		for (Pair<Integer, Integer> index : alphabetialIndex) {
+			int lineIndex = index.getFirst();
+			int wordIndex = index.getSecond();
+			List <String> line = lines.get(lineIndex);
+			result += getLineWithKeyInFront(line, wordIndex) + "\n";
+		}
+		
+		view.SetResultText(result);
+	}
 	
 	//Private helper methods
 	private List <String> splitTextToStringList (String text, String regex) {
@@ -90,14 +90,16 @@ public class KwicControl {
 		List <String> lines = splitTextToStringList(inputText, "\n");
 		List < List <String>> linesAndwords = new ArrayList<List<String>>();
 		for (String line : lines) {
-			List <String> words = splitTextToStringList(line, " ");
+			if (line == null || line.length() <= 0)
+				continue;
+			List <String> words = splitTextToStringList(line, " "); 
 			linesAndwords.add(words);
 		}
 		model.SetLines(linesAndwords);
 	}
 	
 	private void inputIgnoredWordsToModel (String ignoredText) {
-		List <String> ignoredWords = splitTextToStringList(ignoredText, " ");
+		List <String> ignoredWords = splitTextToStringList(ignoredText, "\\W"); // \\W means any non-word char
 		this.model.SetIgnoredWords(ignoredWords);
 	}
 
@@ -109,4 +111,35 @@ public class KwicControl {
 		return false;
 	}
 
+	private String getLineWithKeyInFront (List <String> line, int index) {
+		String result = "";
+		for (int i = 0; i < line.size(); i++) {
+			if (index == i)
+				result = line.get(index) + " " + result;
+			else
+				result += line.get(i) + " ";
+		}
+		result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
+		return result;
+	}
+	
+	private void calculateResult() {
+		String inputText = view.GetTitleText();
+		String ignoredText = view.GetIgnoredWords();
+		model.ClearData();
+		input(inputText, ignoredText);
+		circularShift();
+		alphabetize();
+		output();
+	}
+	
+	private class GetResultListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			calculateResult();
+		}
+		
+	}
+	
 }

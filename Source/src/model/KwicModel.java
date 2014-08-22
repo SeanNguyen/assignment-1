@@ -55,6 +55,35 @@ public class KwicModel {
 		this.indexes.set(index2, tempIndex);
 	}
 	
+	public void InsertToAlphabeticalIndexList (Pair<Integer, Integer> index) {
+		int alphabeticalIndexesSize = alphabeticalIndexes.size();
+		for (int i = 0; i <= alphabeticalIndexesSize; i++) {
+			if (i == alphabeticalIndexesSize) {
+				alphabeticalIndexes.add(index);
+				break;
+			} else {
+				int lineIndex = index.getFirst();
+				int wordIndex = index.getSecond();
+				int nextLineIndex = alphabeticalIndexes.get(i).getFirst();
+				int nextWordIndex = alphabeticalIndexes.get(i).getSecond();
+				String currentword = getWordByIndex(lineIndex, wordIndex);
+				String nextWord = getWordByIndex(nextLineIndex, nextWordIndex);
+				if (currentword.compareToIgnoreCase(nextWord) < 0) {
+					alphabeticalIndexes.add(i, index);
+					break;
+				}
+			}
+		}
+	}
+	
+	public void ClearData() {
+		this.lines.clear();
+		this.indexes.clear();
+		this.ignoredWords = new ArrayList<String>();
+		this.alphabeticalIndexes.clear();
+	}
+	
+	//private helper methods
 	public String getWordByIndex (int lineIndex, int wordIndex) {
 		List <String> line = this.lines.get(lineIndex);
 		return line.get(wordIndex);
