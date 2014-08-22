@@ -34,7 +34,7 @@ public class KwicControl {
 		List <Pair<Integer, Integer>> indexesOfCircularShift = new ArrayList<Pair<Integer,Integer>>();
 		for (List <String> line : this.model.GetLines()) {
 			for (String word : line) {
-				if (isIgnoredWord(word))
+				if (isIgnoredWord(word) || word.matches("\\W"))
 					continue;
 				int lineIndex = model.GetLines().indexOf(line);
 				int wordIndex = line.indexOf(word);
