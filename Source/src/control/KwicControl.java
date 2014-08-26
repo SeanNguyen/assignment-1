@@ -14,6 +14,14 @@ public class KwicControl {
 	private KwicModel model;
 	private KwicView view;
 	
+	public static void main (String[] args) {
+		KwicModel model = new KwicModel();
+		KwicView view = new KwicView();
+		KwicControl control = new KwicControl(view, model);
+		
+		view.setVisible(true);
+	}
+	
 	public KwicControl(KwicView view, KwicModel model) {
 		this.view = view;
 		this.model = model;
