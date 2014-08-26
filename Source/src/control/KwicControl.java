@@ -73,7 +73,7 @@ public class KwicControl {
 			result += getLineWithKeyInFront(line, wordIndex) + "\n";
 		}
 		
-		view.SetResultText(result);
+		view.setResultText(result);
 	}
 	
 	//Private helper methods
@@ -132,8 +132,8 @@ public class KwicControl {
 	}
 	
 	private void calculateResult() {
-		String inputText = view.GetTitleText();
-		String ignoredText = view.GetIgnoredWords();
+		String inputText = view.getTitleText();
+		String ignoredText = view.getIgnoredWords();
 		model.clearData();
 		input(inputText, ignoredText);
 		circularShift();

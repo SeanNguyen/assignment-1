@@ -2,7 +2,7 @@ package control;
 
 public class Configurations {
 	public static final String GETRESULT_BUTTON_TEXT = "GET RESULT";
-	public static final String TITLE_DEFAULTTEXT = "Enter movie tittles here: ";
+	public static final String TITLE_DEFAULTTEXT = "Enter movie titles here: ";
 	public static final String IGNOREDWORD_DEFAULTTEXT = "Enter ignored words here: ";
 	public static final String RESULT_DEFAULTTEXT = "Results will be shown here: ";
 	

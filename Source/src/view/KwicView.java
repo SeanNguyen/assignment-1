@@ -39,15 +39,15 @@ public class KwicView extends JFrame{
 		
 	}
 	
-	public String GetTitleText () {
+	public String getTitleText () {
 		return titleText.getText();
 	}
 	
-	public String GetIgnoredWords () {
+	public String getIgnoredWords () {
 		return ignoreWordsText.getText();
 	}
 	
-	public void SetResultText (String result) {
+	public void setResultText (String result) {
 		this.resultText.setText(result);
 	}
 	
