@@ -40,31 +40,31 @@ public class KwicControl {
 	//Circular Shift
 	private void circularShift () {
 		List <Pair<Integer, Integer>> indexesOfCircularShift = new ArrayList<Pair<Integer,Integer>>();
-		for (List <String> line : this.model.GetLines()) {
+		for (List <String> line : this.model.getLines()) {
 			for (String word : line) {
 				if (isIgnoredWord(word) || word.matches("\\W"))
 					continue;
-				int lineIndex = model.GetLines().indexOf(line);
+				int lineIndex = model.getLines().indexOf(line);
 				int wordIndex = line.indexOf(word);
 				Pair<Integer, Integer> index = new Pair<Integer, Integer>(lineIndex, wordIndex); 
 				indexesOfCircularShift.add(index);
 			}
 		}
-		model.SetIndexes(indexesOfCircularShift);
+		model.setIndexes(indexesOfCircularShift);
 	}
 	
 	//Alphabetizer
 	private void alphabetize() {
-		for (Pair<Integer, Integer> index : model.GetIndexes()) {
-			model.InsertToAlphabeticalIndexList(index);
+		for (Pair<Integer, Integer> index : model.getIndexes()) {
+			model.insertToAlphabeticalIndexList(index);
 		}
 	}
 	
 	//Output
 	private void output () {
 		String result = "";
-		List < List < String > > lines = model.GetLines();
-		List < Pair<Integer, Integer>> alphabetialIndex = model.GetAlphabetialIndexes();
+		List < List < String > > lines = model.getLines();
+		List < Pair<Integer, Integer>> alphabetialIndex = model.getAlphabetialIndexes();
 		
 		for (Pair<Integer, Integer> index : alphabetialIndex) {
 			int lineIndex = index.getFirst();
@@ -103,16 +103,16 @@ public class KwicControl {
 			List <String> words = splitTextToStringList(line, " "); 
 			linesAndwords.add(words);
 		}
-		model.SetLines(linesAndwords);
+		model.setLines(linesAndwords);
 	}
 	
 	private void inputIgnoredWordsToModel (String ignoredText) {
 		List <String> ignoredWords = splitTextToStringList(ignoredText, "\\W"); // \\W means any non-word char
-		this.model.SetIgnoredWords(ignoredWords);
+		this.model.setIgnoredWords(ignoredWords);
 	}
 
 	private boolean isIgnoredWord (String word) {
-		for (String ignoredWord : model.GetIgnoredWords()) {
+		for (String ignoredWord : model.getIgnoredWords()) {
 			if (word.equalsIgnoreCase(ignoredWord))
 				return true;
 		}
@@ -134,7 +134,7 @@ public class KwicControl {
 	private void calculateResult() {
 		String inputText = view.GetTitleText();
 		String ignoredText = view.GetIgnoredWords();
-		model.ClearData();
+		model.clearData();
 		input(inputText, ignoredText);
 		circularShift();
 		alphabetize();

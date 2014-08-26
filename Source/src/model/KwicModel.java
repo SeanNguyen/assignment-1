@@ -17,45 +17,45 @@ public class KwicModel {
 	}
 	
 	//public methods
-	public List < List < String >> GetLines() {
+	public List < List < String >> getLines() {
 		return lines;
 	}
 	
-	public void SetLines (List < List < String >> lines) {
+	public void setLines (List < List < String >> lines) {
 		this.lines = lines;
 	}
 	
-	public List < Pair <Integer, Integer>> GetIndexes() {
+	public List < Pair <Integer, Integer>> getIndexes() {
 		return indexes;
 	}
 	
-	public void SetIndexes (List < Pair <Integer, Integer>> indexes) {
+	public void setIndexes (List < Pair <Integer, Integer>> indexes) {
 		this.indexes = indexes;
 	}
 	
-	public List < Pair <Integer, Integer>> GetAlphabetialIndexes() {
+	public List < Pair <Integer, Integer>> getAlphabetialIndexes() {
 		return alphabeticalIndexes;
 	}
 	
-	public void SetAlphabeticalIndexes (List < Pair <Integer, Integer>> alphabeticalIndexes) {
+	public void setAlphabeticalIndexes (List < Pair <Integer, Integer>> alphabeticalIndexes) {
 		this.alphabeticalIndexes = alphabeticalIndexes;
 	}
 	
-	public List <String> GetIgnoredWords () {
+	public List <String> getIgnoredWords () {
 		return ignoredWords;
 	}
 	
-	public void SetIgnoredWords (List <String> ignoredWords) {
+	public void setIgnoredWords (List <String> ignoredWords) {
 		this.ignoredWords = ignoredWords;
 	}
 	
-	public void SwapIndex (int index1, int index2) {
+	public void swapIndex (int index1, int index2) {
 		Pair<Integer, Integer> tempIndex = this.indexes.get(index1);
 		this.indexes.set(index1, this.indexes.get(index2));
 		this.indexes.set(index2, tempIndex);
 	}
 	
-	public void InsertToAlphabeticalIndexList (Pair<Integer, Integer> index) {
+	public void insertToAlphabeticalIndexList (Pair<Integer, Integer> index) {
 		int alphabeticalIndexesSize = alphabeticalIndexes.size();
 		for (int i = 0; i <= alphabeticalIndexesSize; i++) {
 			if (i == alphabeticalIndexesSize) {
@@ -76,7 +76,7 @@ public class KwicModel {
 		}
 	}
 	
-	public void ClearData() {
+	public void clearData() {
 		this.lines.clear();
 		this.indexes.clear();
 		this.ignoredWords = new ArrayList<String>();
