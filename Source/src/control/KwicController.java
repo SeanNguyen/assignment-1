@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import model.AlphabeticalSorter;
@@ -35,6 +34,21 @@ public class KwicController {
 	@FXML
 	private void handleGetResultButtonClick() {
 		calculateResult();
+	}
+	
+	@FXML
+	private void handleClearInputClick() {
+		this.inputText.setText(Configurations.EMPTYTEXT);
+	}
+
+	@FXML
+	private void handleClearIgnoredWordsClick() {
+		this.ignoredWordsText.setText(Configurations.EMPTYTEXT);
+	}
+
+	@FXML
+	private void handleClearResultClick() {
+		this.resultText.setText(Configurations.EMPTYTEXT);
 	}
 	
 	//Input
