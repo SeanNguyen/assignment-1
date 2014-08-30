@@ -122,11 +122,12 @@ public class KwicController {
 
 	private String getLineWithKeyInFront (List <String> line, int index) {
 		String result = "";
-		for (int i = 0; i < line.size(); i++) {
-			if (index == i)
-				result = line.get(index) + " " + result;
-			else
+		for (int i = index; i < line.size(); i++) {
 				result += line.get(i) + " ";
+		}
+		
+		for (int i = 0; i < index; i++) {
+			result += line.get(i) + " ";
 		}
 		
 		if (!result.isEmpty()) {
