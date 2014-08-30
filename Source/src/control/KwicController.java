@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import model.AlphabeticalSorter;
+import model.CircularShifterIgnoreWord;
 import model.KwicModel;
-import model.Pair;
+import model.Shifter;
+import model.Sorter;
 
 public class KwicController {
 	private KwicModel model;
+	private String WHITESPACE = " ";
 	
 	@FXML
 	private TextArea inputText;
@@ -35,53 +38,22 @@ public class KwicController {
 		String inputText = this.inputText.getText();
 		String ignoredWords = this.ignoredWordsText.getText();
 		input(inputText, ignoredWords);
-		circularShift();
-		alphabetize();
-		output();
 	}
 	
 	//Input
 	private void input (String inputText, String ignoredText) {
 		inputText = inputText.toLowerCase();
 		ignoredText = ignoredText.toLowerCase();
-		inputTextToModel(inputText);
+		convertTextToList(inputText);
 		inputIgnoredWordsToModel(ignoredText);
 	}
 	
-	//Circular Shift
-	private void circularShift () {
-		List <Pair<Integer, Integer>> indexesOfCircularShift = new ArrayList<Pair<Integer,Integer>>();
-		for (List <String> line : this.model.getLines()) {
-			for (String word : line) {
-				if (isIgnoredWord(word) || word.matches("\\W"))
-					continue;
-				int lineIndex = model.getLines().indexOf(line);
-				int wordIndex = line.indexOf(word);
-				Pair<Integer, Integer> index = new Pair<Integer, Integer>(lineIndex, wordIndex); 
-				indexesOfCircularShift.add(index);
-			}
-		}
-		model.setIndexes(indexesOfCircularShift);
-	}
-	
-	//Alphabetizer
-	private void alphabetize() {
-		for (Pair<Integer, Integer> index : model.getIndexes()) {
-			model.insertToAlphabeticalIndexList(index);
-		}
-	}
-	
 	//Output
-	private void output () {
+	private void output (List <List <String>> lines) {
 		String result = "";
-		List < List < String > > lines = model.getLines();
-		List < Pair<Integer, Integer>> alphabetialIndex = model.getAlphabetialIndexes();
 		
-		for (Pair<Integer, Integer> index : alphabetialIndex) {
-			int lineIndex = index.getFirst();
-			int wordIndex = index.getSecond();
-			List <String> line = lines.get(lineIndex);
-			result += getLineWithKeyInFront(line, wordIndex) + "\n";
+		for (List<String> line : lines){
+			result += getLineWithKeyInFront(line);
 		}
 		this.resultText.setText(result);
 	}
@@ -98,16 +70,16 @@ public class KwicController {
 		return textList;
 	}
 	
-	private void inputTextToModel(String inputText) {
+	private List<List<String>> convertTextToList(String inputText) {
 		List <String> lines = splitTextToStringList(inputText, "\n");
-		List < List <String>> linesAndwords = new ArrayList<List<String>>();
+		List < List <String>> linesAndWords = new ArrayList<List<String>>();
 		for (String line : lines) {
 			if (line == null || line.length() <= 0)
 				continue;
-			List <String> words = splitTextToStringList(line, " "); 
-			linesAndwords.add(words);
+			List <String> words = splitTextToStringList(line, WHITESPACE); 
+			linesAndWords.add(words);
 		}
-		model.setLines(linesAndwords);
+		return linesAndWords;
 	}
 	
 	private void inputIgnoredWordsToModel (String ignoredText) {
@@ -123,16 +95,34 @@ public class KwicController {
 		return false;
 	}
 
-	private String getLineWithKeyInFront (List <String> line, int index) {
+	private String getLineWithKeyInFront (List <String> line) {
+		
 		String result = "";
-		for (int i = 0; i < line.size(); i++) {
-			if (index == i)
-				result = line.get(index) + " " + result;
-			else
-				result += line.get(i) + " ";
+		for (String word : line){
+			result += word;
 		}
+		
 		result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
 		return result;
 	}
 	
+	private void calculateResult() {
+		String inputText = this.inputText.getText();
+		String ignoredText = this.ignoredWordsText.getText();
+		model.clearData();
+		List <List <String>> myLines = convertTextToList(inputText);
+		List <String> ignoreList = splitTextToStringList(ignoredText,WHITESPACE);
+		
+		//Shifting the lines
+		Shifter shifter = new CircularShifterIgnoreWord(ignoreList);
+		shifter.inputLines(myLines);
+		myLines = shifter.getOutputLines();
+		
+		//Sort by alphabets
+		Sorter sorter = new AlphabeticalSorter();
+		sorter.inputLines(myLines);
+		myLines = sorter.getOutputLines();
+		
+		output(myLines);
+	}
 }

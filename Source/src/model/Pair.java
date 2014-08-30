@@ -1,5 +1,7 @@
 package model;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 public class Pair <A, B> {
     private A first;
     private B second;
@@ -13,7 +15,7 @@ public class Pair <A, B> {
     public int hashCode() {
     	int hashFirst = first != null ? first.hashCode() : 0;
     	int hashSecond = second != null ? second.hashCode() : 0;
-
+    	
     	return (hashFirst + hashSecond) * hashSecond + hashFirst;
     }
 
