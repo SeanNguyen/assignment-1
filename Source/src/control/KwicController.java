@@ -14,8 +14,6 @@ import model.Sorter;
 
 public class KwicController {
 	private KwicModel model;
-	private String WHITESPACE = " ";
-	
 	@FXML
 	private TextArea inputText;
 	@FXML
@@ -76,7 +74,7 @@ public class KwicController {
 		for (String line : lines) {
 			if (line == null || line.length() <= 0)
 				continue;
-			List <String> words = splitTextToStringList(line, WHITESPACE); 
+			List <String> words = splitTextToStringList(line, Configurations.WHITESPACE); 
 			linesAndWords.add(words);
 		}
 		return linesAndWords;
@@ -111,7 +109,7 @@ public class KwicController {
 		String ignoredText = this.ignoredWordsText.getText();
 		model.clearData();
 		List <List <String>> myLines = convertTextToList(inputText);
-		List <String> ignoreList = splitTextToStringList(ignoredText,WHITESPACE);
+		List <String> ignoreList = splitTextToStringList(ignoredText, Configurations.WHITESPACE);
 		
 		//Shifting the lines
 		Shifter shifter = new CircularShifterIgnoreWord(ignoreList);
