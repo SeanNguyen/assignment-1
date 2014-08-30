@@ -7,12 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import view.KwicView;
+import model.AlphabeticalSorter;
+import model.CircularShifterIgnoreWord;
 import model.KwicModel;
 import model.Pair;
+import model.Shifter;
+import model.Sorter;
 
 public class KwicControl {
 	private KwicModel model;
 	private KwicView view;
+	private String WHITESPACE = " ";
 	
 	public static void main (String[] args) {
 		KwicModel model = new KwicModel();
@@ -33,24 +38,8 @@ public class KwicControl {
 	private void input (String inputText, String ignoredText) {
 		inputText = inputText.toLowerCase();
 		ignoredText = ignoredText.toLowerCase();
-		inputTextToModel(inputText);
+		convertTextToList(inputText);
 		inputIgnoredWordsToModel(ignoredText);
-	}
-	
-	//Circular Shift
-	private void circularShift () {
-		List <Pair<Integer, Integer>> indexesOfCircularShift = new ArrayList<Pair<Integer,Integer>>();
-		for (List <String> line : this.model.getLines()) {
-			for (String word : line) {
-				if (isIgnoredWord(word) || word.matches("\\W"))
-					continue;
-				int lineIndex = model.getLines().indexOf(line);
-				int wordIndex = line.indexOf(word);
-				Pair<Integer, Integer> index = new Pair<Integer, Integer>(lineIndex, wordIndex); 
-				indexesOfCircularShift.add(index);
-			}
-		}
-		model.setIndexes(indexesOfCircularShift);
 	}
 	
 	//Alphabetizer
@@ -94,16 +83,16 @@ public class KwicControl {
 		return elements;
 	}
 	
-	private void inputTextToModel(String inputText) {
+	private List<List<String>> convertTextToList(String inputText) {
 		List <String> lines = splitTextToStringList(inputText, "\n");
-		List < List <String>> linesAndwords = new ArrayList<List<String>>();
+		List < List <String>> linesAndWords = new ArrayList<List<String>>();
 		for (String line : lines) {
 			if (line == null || line.length() <= 0)
 				continue;
-			List <String> words = splitTextToStringList(line, " "); 
-			linesAndwords.add(words);
+			List <String> words = splitTextToStringList(line, WHITESPACE); 
+			linesAndWords.add(words);
 		}
-		model.setLines(linesAndwords);
+		return linesAndWords;
 	}
 	
 	private void inputIgnoredWordsToModel (String ignoredText) {
@@ -135,9 +124,19 @@ public class KwicControl {
 		String inputText = view.getTitleText();
 		String ignoredText = view.getIgnoredWords();
 		model.clearData();
-		input(inputText, ignoredText);
-		circularShift();
-		alphabetize();
+		List <List <String>> myLines = convertTextToList(inputText);
+		List <String> ignoreList = splitTextToStringList(ignoredText,WHITESPACE);
+		
+		//Shifting the lines
+		Shifter shifter = new CircularShifterIgnoreWord(ignoreList);
+		shifter.inputLines(myLines);
+		myLines = shifter.getOutputLines();
+		
+		//Sort by alphabets
+		Sorter sorter = new AlphabeticalSorter();
+		sorter.inputLines(myLines);
+		myLines = sorter.getOutputLines();
+		
 		output();
 	}
 	

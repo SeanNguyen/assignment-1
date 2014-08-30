@@ -1,5 +1,5 @@
 package model;
 
-public abstract class Sorter {
+public abstract class Sorter implements IProcessor{
 
 }

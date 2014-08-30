@@ -1,5 +1,5 @@
 package model;
 
-public abstract class Shifter {
+public abstract class Shifter implements IProcessor{
 
 }

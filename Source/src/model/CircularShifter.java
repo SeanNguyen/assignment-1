@@ -3,9 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CircularShifter extends Shifter implements IProcessor{
+public class CircularShifter extends Shifter{
 
+	private String NON_CHAR = "\\W"; 
 	private List<List<String>>lines;
+	
+	public CircularShifter(){
+		this.lines = new ArrayList <List<String>>();
+	}
 	
 	@Override
 	public void inputLines(List <List<String>> lines) {
@@ -14,7 +19,7 @@ public class CircularShifter extends Shifter implements IProcessor{
 	}
 
 	@Override
-	public List <List<String>> getOutputLines() {
+	public List<List<String>> getOutputLines() {
 		circularShift();
 		return this.lines;
 	}
@@ -22,13 +27,21 @@ public class CircularShifter extends Shifter implements IProcessor{
 	//Circular Shift
 	private void circularShift () {
 		List <List <String>> outputLines = new ArrayList <List<String>>();
-		List <Pair<Integer, Integer>> indexesOfCircularShift = new ArrayList<Pair<Integer,Integer>>();
 		for (List <String> line : this.lines) {
+			List <String> tempLine = line;
 			for (String word : line) {
-				if (isIgnoredWord(word) || word.matches("\\W"))
+				
+				//Shift the list
+				tempLine.subList(1, line.size()-1);
+				tempLine.add(word);
+				
+				if (isIgnoredWord(word) || word.matches(NON_CHAR)){
 					continue;
-				int lineIndex = this.lines.indexOf(line);
-				int wordIndex = line.indexOf(word);
+				}else{
+					outputLines.add(tempLine);
+				}
+				
+				
 			}
 		}
 		
@@ -36,7 +49,7 @@ public class CircularShifter extends Shifter implements IProcessor{
 	}
 	
 	private boolean isIgnoredWord(String word){
-		return true;
+		return false;
 	}
 	
 }
