@@ -23,6 +23,11 @@ public class KwicController {
 	}
 	
 	@FXML
+    private void initialize() {
+		this.resultText.setEditable(false);
+    }
+	
+	@FXML
 	private void handleGetResultButtonClick() {
 		model.clearData();
 		String inputText = this.inputText.getText();
