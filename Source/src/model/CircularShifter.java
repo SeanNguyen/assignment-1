@@ -15,7 +15,6 @@ public class CircularShifter extends Shifter{
 	@Override
 	public void inputLines(List <List<String>> lines) {
 		this.lines = lines;
-
 		
 	}
 
@@ -29,9 +28,12 @@ public class CircularShifter extends Shifter{
 	private void circularShift () {
 		List <List <String>> outputLines = new ArrayList <List<String>>();
 		for (List <String> line : this.lines) {
-			List <String> tempLine = line;
-			
+			List <String> tempLine = new ArrayList<String>();
 			for (String word : line) {
+				
+				//Shift the list
+				tempLine = line.subList(1, line.size()-1);
+				//tempLine.add(word);
 				
 				if (isIgnoredWord(word) || word.matches(NON_CHAR)){
 					continue;
@@ -40,12 +42,7 @@ public class CircularShifter extends Shifter{
 				}
 
 			}
-			
-			for (String word : tempLine){
-				System.out.println(word);
-			}
 		}
-		
 		
 		this.lines = outputLines;
 	}
