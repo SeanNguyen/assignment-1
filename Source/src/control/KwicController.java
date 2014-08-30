@@ -1,32 +1,36 @@
 package control;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import view.KwicView;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import model.KwicModel;
 import model.Pair;
 
-public class KwicControl {
+public class KwicController {
 	private KwicModel model;
-	private KwicView view;
 	
-	public static void main (String[] args) {
-		KwicModel model = new KwicModel();
-		KwicView view = new KwicView();
-		KwicControl control = new KwicControl(view, model);
-		
-		view.setVisible(true);
+	@FXML
+	private TextArea inputText;
+	@FXML
+	private TextArea ignoredWordsText;
+	@FXML
+	private TextArea resultText;
+	
+	public KwicController() {
+		this.model = new KwicModel();
 	}
 	
-	public KwicControl(KwicView view, KwicModel model) {
-		this.view = view;
-		this.model = model;
-		
-		view.addResultButtonListener(new GetResultListener());
+	@FXML
+	private void handleGetResultButtonClick() {
+		model.clearData();
+		String inputText = this.inputText.getText();
+		String ignoredWords = this.ignoredWordsText.getText();
+		input(inputText, ignoredWords);
+		circularShift();
+		alphabetize();
+		output();
 	}
 	
 	//Input
@@ -72,8 +76,7 @@ public class KwicControl {
 			List <String> line = lines.get(lineIndex);
 			result += getLineWithKeyInFront(line, wordIndex) + "\n";
 		}
-		
-		view.setResultText(result);
+		this.resultText.setText(result);
 	}
 	
 	//Private helper methods
@@ -129,25 +132,6 @@ public class KwicControl {
 		}
 		result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
 		return result;
-	}
-	
-	private void calculateResult() {
-		String inputText = view.getTitleText();
-		String ignoredText = view.getIgnoredWords();
-		model.clearData();
-		input(inputText, ignoredText);
-		circularShift();
-		alphabetize();
-		output();
-	}
-	
-	private class GetResultListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			calculateResult();
-		}
-		
 	}
 	
 }
