@@ -118,23 +118,31 @@ public class KwicControl {
 		String inputText = view.getTitleText();
 		String ignoredText = view.getIgnoredWords();
 		model.clearData();
-		System.out.println("Input: " + inputText);
-		System.out.println("Ignore: " + ignoredText);
 		
-		List <List <String>> myLines = convertTextToList(inputText);
+		/** Test code **/
+		
+		inputText = "The Day after Tomorrow\nFast and Furious\nMan of Steel\n";
+		ignoredText = "is the of and as a after";
+		
+		List <List <String>> myLines = convertTextToList(inputText);		
 		List <String> ignoreList = splitTextToStringList(ignoredText,WHITESPACE);
 		
 		//Shifting the lines
 		Shifter shifter = new CircularShifterIgnoreWord(ignoreList);
 		shifter.inputLines(myLines);
 		myLines = shifter.getOutputLines();
-		
+		/*
+		for (List <String> line: myLines){
+			for (String word : line){
+				System.out.println(word);
+			}
+		}/*
 		//Sort by alphabets
 		Sorter sorter = new AlphabeticalSorter();
 		sorter.inputLines(myLines);
 		myLines = sorter.getOutputLines();
 		
-		output(myLines);
+		output(myLines);*/
 	}
 	
 	private class GetResultListener implements ActionListener {
