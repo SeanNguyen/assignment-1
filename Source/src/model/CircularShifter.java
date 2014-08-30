@@ -28,20 +28,19 @@ public class CircularShifter extends Shifter{
 	private void circularShift () {
 		List <List <String>> outputLines = new ArrayList <List<String>>();
 		for (List <String> line : this.lines) {
-			List <String> tempLine = line;
+			List <String> tempLine = new ArrayList<String>();
 			for (String word : line) {
 				
 				//Shift the list
-				tempLine.subList(1, line.size()-1);
-				tempLine.add(word);
+				tempLine = line.subList(1, line.size()-1);
+				//tempLine.add(word);
 				
 				if (isIgnoredWord(word) || word.matches(NON_CHAR)){
 					continue;
 				}else{
 					outputLines.add(tempLine);
 				}
-				
-				
+
 			}
 		}
 		

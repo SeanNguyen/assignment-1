@@ -50,16 +50,11 @@ public class KwicControl {
 	}
 	
 	//Output
-	private void output () {
+	private void output (List <List <String>> lines) {
 		String result = "";
-		List < List < String > > lines = model.getLines();
-		List < Pair<Integer, Integer>> alphabetialIndex = model.getAlphabetialIndexes();
 		
-		for (Pair<Integer, Integer> index : alphabetialIndex) {
-			int lineIndex = index.getFirst();
-			int wordIndex = index.getSecond();
-			List <String> line = lines.get(lineIndex);
-			result += getLineWithKeyInFront(line, wordIndex) + "\n";
+		for (List<String> line : lines){
+			result += getLineWithKeyInFront(line);
 		}
 		
 		view.setResultText(result);
@@ -108,14 +103,13 @@ public class KwicControl {
 		return false;
 	}
 
-	private String getLineWithKeyInFront (List <String> line, int index) {
+	private String getLineWithKeyInFront (List <String> line) {
+		
 		String result = "";
-		for (int i = 0; i < line.size(); i++) {
-			if (index == i)
-				result = line.get(index) + " " + result;
-			else
-				result += line.get(i) + " ";
+		for (String word : line){
+			result += word;
 		}
+		
 		result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
 		return result;
 	}
@@ -124,6 +118,9 @@ public class KwicControl {
 		String inputText = view.getTitleText();
 		String ignoredText = view.getIgnoredWords();
 		model.clearData();
+		System.out.println("Input: " + inputText);
+		System.out.println("Ignore: " + ignoredText);
+		
 		List <List <String>> myLines = convertTextToList(inputText);
 		List <String> ignoreList = splitTextToStringList(ignoredText,WHITESPACE);
 		
@@ -137,7 +134,7 @@ public class KwicControl {
 		sorter.inputLines(myLines);
 		myLines = sorter.getOutputLines();
 		
-		output();
+		output(myLines);
 	}
 	
 	private class GetResultListener implements ActionListener {

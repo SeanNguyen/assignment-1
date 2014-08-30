@@ -48,17 +48,7 @@ public class AlphabeticalSorter extends Sorter {
 	private List <String> splitTextToStringList (String text, String regex) {
 		String[] textArray = text.split(regex);
 		List <String> textList = Arrays.asList(textArray);
-		return removeEmptyElements(textList);
+		return textList;
 	}
 
-	private List <String> removeEmptyElements (List <String> elements) {
-		for (int i = 0; i < elements.size(); i++) {
-			String element = elements.get(i);
-			if (element == null || element == "") {
-				elements.remove(i);
-				i--;
-			}
-		}
-		return elements;
-	}
 }
