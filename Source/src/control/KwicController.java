@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 import model.AlphabeticalSorter;
 import model.CircularShifterIgnoreWord;
 import model.KwicModel;
@@ -21,6 +22,13 @@ public class KwicController {
 	private TextArea ignoredWordsText;
 	@FXML
 	private TextArea resultText;
+	@FXML
+	private Text noOfInput;
+	@FXML
+	private Text noOfIgnoredWord;
+	@FXML
+	private Text noOfResult;
+	
 	
 	public KwicController() {
 		this.model = new KwicModel();
@@ -31,24 +39,33 @@ public class KwicController {
 		this.resultText.setEditable(false);
     }
 	
+	//Event handlers
+	
 	@FXML
 	private void handleGetResultButtonClick() {
 		calculateResult();
+		
+		noOfInput.setText("" + model.getLines().size());
+		noOfIgnoredWord.setText("" + model.getIgnoredWords().size());
+		noOfResult.setText("" + model.getAlphabetialIndexes().size());
 	}
 	
 	@FXML
 	private void handleClearInputClick() {
 		this.inputText.setText(Configurations.EMPTYTEXT);
+		this.noOfInput.setText(Configurations.EMPTYTEXT);
 	}
 
 	@FXML
 	private void handleClearIgnoredWordsClick() {
 		this.ignoredWordsText.setText(Configurations.EMPTYTEXT);
+		this.noOfIgnoredWord.setText(Configurations.EMPTYTEXT);
 	}
 
 	@FXML
 	private void handleClearResultClick() {
 		this.resultText.setText(Configurations.EMPTYTEXT);
+		this.noOfResult.setText(Configurations.EMPTYTEXT);
 	}
 	
 	//Input
