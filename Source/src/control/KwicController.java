@@ -2,7 +2,9 @@ package control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import model.KwicModel;
@@ -87,19 +89,13 @@ public class KwicController {
 	//Private helper methods
 	private List <String> splitTextToStringList (String text, String regex) {
 		String[] textArray = text.split(regex);
-		List <String> textList = Arrays.asList(textArray);
-		return removeEmptyElements(textList);
-	}
-	
-	private List <String> removeEmptyElements (List <String> elements) {
-		for (int i = 0; i < elements.size(); i++) {
-			String element = elements.get(i);
-			if (element == null || element == "") {
-				elements.remove(i);
-				i--;
-			}
+		List <String> textList = new LinkedList<String>(Arrays.asList(textArray));
+		textList.removeAll(Arrays.asList("", null));
+		for (int i = 0; i < textList.size(); i++) {
+			String trimedWord = textList.get(i).trim();
+			textList.set(i, trimedWord);
 		}
-		return elements;
+		return textList;
 	}
 	
 	private void inputTextToModel(String inputText) {
