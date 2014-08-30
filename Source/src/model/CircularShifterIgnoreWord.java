@@ -1,23 +1,17 @@
 package model;
 
-import java.util.List;
-
 public class CircularShifterIgnoreWord extends CircularShifter{
-	
-	private List <String> listToIgnore;
-	
-	public CircularShifterIgnoreWord(List <String> listToIgnore){
-		this.listToIgnore = listToIgnore;
+	 
+	public CircularShifterIgnoreWord(KwicModel model) {
+		super(model);
 	}
-	
-	private boolean isIgnoredWord(String inputWord){
-		
-		for (String ignoredWord : this.listToIgnore){
-			if (inputWord.equalsIgnoreCase(ignoredWord)){
+
+	@Override
+	protected boolean isIgnoredWord(String word){
+		for (String ignoredWord : model.getIgnoredWords()) {
+			if (word.equalsIgnoreCase(ignoredWord))
 				return true;
-			}
 		}
-		
 		return false;
 	}
 

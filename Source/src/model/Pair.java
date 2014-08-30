@@ -1,7 +1,5 @@
 package model;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
 public class Pair <A, B> {
     private A first;
     private B second;
