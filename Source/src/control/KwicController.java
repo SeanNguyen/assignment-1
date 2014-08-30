@@ -94,13 +94,14 @@ public class KwicController {
 	}
 
 	private String getLineWithKeyInFront (List <String> line) {
-		
 		String result = "";
 		for (String word : line){
 			result += word;
 		}
 		
-		result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
+		if (!result.isEmpty()) {
+			result = Character.toUpperCase(result.charAt(0)) + result.substring(1);
+		}
 		return result;
 	}
 	
